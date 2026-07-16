@@ -2,7 +2,7 @@
 
 這是一個使用 **Java 8、Maven、JUnit 5** 製作的「韌體升級自動化測試專案」。
 
-本專案不會真的把韌體燒錄到實體 Switch、AP 或開發板，而是先用 **Mock Device（模擬裝置）** 模擬韌體升級流程，讓初學者能在沒有硬體的情況下練習：
+本專案不會真的把韌體燒錄到實體 Switch、AP 或開發板，而是先用 **Mock Device（模擬裝置）** 模擬韌體升級流程，讓使用者能在沒有硬體的情況下練習：
 
 - Java 物件導向設計
 - 韌體檔案驗證
@@ -23,7 +23,7 @@
 1.0.0
 ```
 
-我們準備一個新韌體：
+準備一個新韌體：
 
 ```text
 1.1.0
@@ -100,10 +100,8 @@ java-firmware-upgrade-test-automation
 
 ## 1. `App.java`
 
-這是專案的主程式，也是最適合初學者先看的檔案。
-
+這是專案的主程式。
 它會：
-
 1. 建立一台假的裝置
 2. 設定目前韌體版本為 `1.0.0`
 3. 建立新的韌體 `1.1.0`
@@ -111,8 +109,6 @@ java-firmware-upgrade-test-automation
 5. 呼叫升級服務
 6. 顯示升級結果
 7. 產生 Markdown 報告
-
-簡單說：
 
 > `App.java` 是把整個專案串起來執行的入口。
 
@@ -131,8 +127,6 @@ UPGRADING   正在升級
 REBOOTING   正在重新開機
 FAILED      發生失敗
 ```
-
-簡單說：
 
 > 它像是裝置目前狀態的選單，避免直接使用容易打錯的文字。
 
@@ -156,8 +150,6 @@ Device Name：Lab-Switch
 
 韌體升級前後會比較這些設定，確認升級後沒有遺失。
 
-簡單說：
-
 > 它代表裝置目前的基本設定資料。
 
 ---
@@ -167,7 +159,6 @@ Device Name：Lab-Switch
 這是一個 Interface，定義「裝置應該具備哪些功能」。
 
 例如：
-
 - 取得型號
 - 取得韌體版本
 - 取得裝置狀態
@@ -178,8 +169,6 @@ Device Name：Lab-Switch
 - 取得 Log
 
 它本身沒有真的執行升級，只是先規定方法名稱。
-
-簡單說：
 
 > 它像一份裝置操作規格書，規定所有裝置類別都必須實作哪些功能。
 
@@ -199,7 +188,6 @@ SerialDeviceClient
 這是模擬裝置的核心程式。
 
 因為目前沒有真正的 Switch、AP 或開發板，所以使用它模擬：
-
 - 韌體上傳
 - 韌體升級
 - 裝置重新開機
@@ -226,8 +214,6 @@ device.setSimulateTimeout(true);
 device.setSimulateRebootFailure(true);
 ```
 
-簡單說：
-
 > 它是一台用 Java 寫出來的假設備，讓測試不用依賴實體硬體。
 
 ---
@@ -235,7 +221,6 @@ device.setSimulateRebootFailure(true);
 ## 6. `FirmwarePackage.java`
 
 代表一個韌體檔案，保存：
-
 - 檔名
 - 適用型號
 - 韌體版本
@@ -250,8 +235,6 @@ device.setSimulateRebootFailure(true);
 版本：1.1.0
 ```
 
-簡單說：
-
 > 它是用 Java 物件表示一個韌體安裝包。
 
 ---
@@ -259,12 +242,8 @@ device.setSimulateRebootFailure(true);
 ## 7. `ChecksumUtil.java`
 
 負責計算 SHA-256 Checksum。
-
 Checksum 可以理解為檔案的「數位指紋」。
-
 如果韌體檔案內容遭到修改、下載不完整或損壞，算出來的 Checksum 就會不同。
-
-簡單說：
 
 > 它用來確認韌體檔案是否完整、是否被修改。
 
@@ -275,7 +254,6 @@ Checksum 可以理解為檔案的「數位指紋」。
 在升級之前檢查韌體是否合法。
 
 目前會檢查：
-
 1. 韌體物件不能是空的
 2. 副檔名必須是 `.bin`
 3. 韌體型號必須和裝置型號相同
@@ -283,9 +261,7 @@ Checksum 可以理解為檔案的「數位指紋」。
 
 任何一項失敗，就會停止升級。
 
-簡單說：
-
-> 它是韌體升級前的安全檢查員。
+> 它是韌體升級前的檢查。
 
 ---
 
@@ -304,8 +280,6 @@ Checksum 可以理解為檔案的「數位指紋」。
 passed = true
 message = No critical error keyword found
 ```
-
-簡單說：
 
 > 它把驗證成功或失敗，以及原因一起包裝起來。
 
@@ -328,8 +302,6 @@ BOOT FAILURE
 
 只要找到其中一個，就判定 Log 驗證失敗。
 
-簡單說：
-
 > 它會自動查看升級過程有沒有嚴重錯誤。
 
 ---
@@ -348,8 +320,6 @@ CONFIGURATION_CHANGED  設定被改變
 LOG_ERROR              Log 發現錯誤
 ```
 
-簡單說：
-
 > 它統一管理所有測試結果種類。
 
 ---
@@ -359,7 +329,6 @@ LOG_ERROR              Log 發現錯誤
 保存一次完整升級測試的結果。
 
 包含：
-
 - 升級結果狀態
 - 舊版本
 - 目標版本
@@ -377,9 +346,7 @@ Attempts：1
 Message：Firmware upgrade completed successfully
 ```
 
-簡單說：
-
-> 它就是一次韌體升級測試的成績單。
+> 它就是一次韌體升級測試的結果。
 
 ---
 
@@ -388,7 +355,6 @@ Message：Firmware upgrade completed successfully
 這是整個專案最重要的核心流程。
 
 它負責：
-
 1. 記錄升級前版本與設定
 2. 驗證韌體
 3. 上傳韌體
@@ -400,8 +366,6 @@ Message：Firmware upgrade completed successfully
 9. 比較設定是否保留
 10. 分析 Log
 11. 回傳 UpgradeResult
-
-簡單說：
 
 > 它是整個韌體升級流程的總指揮。
 
@@ -418,15 +382,12 @@ target/reports/firmware-upgrade-report.md
 ```
 
 內容包含：
-
 - 測試結果
 - 升級前版本
 - 目標版本
 - 嘗試次數
 - 執行時間
 - 結果訊息
-
-簡單說：
 
 > 它會把程式結果整理成方便閱讀的測試報告。
 
@@ -458,10 +419,6 @@ target/reports/firmware-upgrade-report.md
 
 故意模擬裝置重新開機失敗，確認系統能重試並回報失敗。
 
-簡單說：
-
-> 它會自動測試主程式在正常與錯誤情況下是否都能正確處理。
-
 ---
 
 ## 16. `pom.xml`
@@ -474,10 +431,6 @@ target/reports/firmware-upgrade-report.md
 - 加入 JUnit 5
 - 設定編譯方式
 - 設定測試執行方式
-
-簡單說：
-
-> 它告訴 Maven 這個專案需要哪些套件，以及要怎麼編譯。
 
 ---
 
@@ -494,31 +447,9 @@ target/reports/firmware-upgrade-report.md
 → 顯示測試成功或失敗
 ```
 
-簡單說：
-
-> 它讓 GitHub 幫你自動執行測試。
-
 ---
 
-## 18. `.gitignore`
-
-告訴 Git 哪些檔案不要上傳，例如：
-
-```text
-target/
-IDE 設定檔
-Log 檔案
-```
-
----
-
-## 19. `LICENSE`
-
-本專案使用 MIT License，表示其他人可以在授權條件下使用、修改與分享此專案。
-
----
-
-# 四、第一次操作：從零開始
+# 四、第一次操作：
 
 以下以 Windows 為例。
 
@@ -738,182 +669,7 @@ Run 'FirmwareUpgradeServiceTest'
 
 ---
 
-# 六、怎麼看懂專案？建議閱讀順序
-
-初學者不要一開始就看最複雜的程式，建議照下面順序：
-
-```text
-1. App.java
-2. DeviceState.java
-3. DeviceConfiguration.java
-4. FirmwarePackage.java
-5. ChecksumUtil.java
-6. FirmwareValidator.java
-7. MockDeviceClient.java
-8. FirmwareUpgradeService.java
-9. UpgradeResult.java
-10. LogValidator.java
-11. FirmwareUpgradeServiceTest.java
-```
-
-每看完一支程式，就回頭看 `App.java` 是如何呼叫它的。
-
----
-
-# 七、可以自己動手修改的練習
-
-## 練習 1：修改目前版本
-
-在 `App.java` 找到：
-
-```java
-new MockDeviceClient("SW-1000", "1.0.0", configuration);
-```
-
-把 `1.0.0` 改成：
-
-```java
-"1.0.5"
-```
-
-重新執行，觀察報告中的舊版本。
-
----
-
-## 練習 2：修改目標版本
-
-把：
-
-```java
-"1.1.0"
-```
-
-改成：
-
-```java
-"2.0.0"
-```
-
-重新執行，確認裝置最後變成 `2.0.0`。
-
----
-
-## 練習 3：模擬 Timeout
-
-在建立裝置後加入：
-
-```java
-device.setSimulateTimeout(true);
-```
-
-重新執行，結果應該變成：
-
-```text
-TIMEOUT
-```
-
-測試完成後，把這行刪掉或改成：
-
-```java
-device.setSimulateTimeout(false);
-```
-
----
-
-## 練習 4：模擬重新開機失敗
-
-加入：
-
-```java
-device.setSimulateRebootFailure(true);
-```
-
-重新執行後，結果應該是：
-
-```text
-REBOOT_FAILED
-```
-
----
-
-## 練習 5：故意製造 Checksum 錯誤
-
-在 `App.java` 建立 `FirmwarePackage` 時，把：
-
-```java
-ChecksumUtil.sha256(firmwareData)
-```
-
-改成：
-
-```java
-"wrong-checksum"
-```
-
-重新執行後，應該得到：
-
-```text
-VALIDATION_FAILED
-```
-
----
-
-# 八、上傳到 GitHub
-
-## 方法一：使用 GitHub 網頁
-
-1. 登入 GitHub
-2. 按右上角 `+`
-3. 選擇 `New repository`
-4. Repository name 輸入：
-
-```text
-java-firmware-upgrade-test-automation
-```
-
-5. 建立 Repository
-6. 選擇 `uploading an existing file`
-7. 將解壓縮後專案資料夾內的所有檔案拖進去
-8. 輸入 Commit message：
-
-```text
-Initial commit: Java firmware upgrade test automation
-```
-
-9. 按 `Commit changes`
-
-注意：要上傳的是資料夾裡的內容，GitHub 首頁應直接看得到 `README.md`、`pom.xml`、`src`，不要多包一層資料夾。
-
----
-
-## 方法二：使用 Git 指令
-
-在專案資料夾執行：
-
-```cmd
-git init
-git add .
-git commit -m "Initial commit: Java firmware upgrade test automation"
-git branch -M main
-git remote add origin 你的GitHubRepository網址
-git push -u origin main
-```
-
----
-
-# 九、面試時怎麼介紹？
-
-可以這樣說：
-
-> 這是一套使用 Java 8 開發的韌體升級自動化測試系統。我使用 Mock Device 模擬網路設備，測試內容包含韌體副檔名、設備型號、SHA-256 Checksum、升級流程、重新開機、版本確認、設定保留與 Log 錯誤分析。我也使用 JUnit 建立正常升級、損壞韌體、型號不相容、Timeout 與重新開機失敗等測試案例，並透過 GitHub Actions 在程式上傳後自動執行測試。
-
-要誠實補充：
-
-> 目前版本採用 Mock Device，尚未直接連接實體硬體；未來可以再擴充 SSH、Serial Port 或 UART，連接真實網路設備或開發板。
-
----
-
-# 十、目前專案的限制
+# 五、目前專案的限制
 
 這個專案目前是學習與作品集版本，因此：
 
@@ -924,7 +680,6 @@ git push -u origin main
 - 裝置狀態由 Mock Device 模擬
 
 但它已經可以展示：
-
 - Java OOP
 - Interface
 - Enum
@@ -937,7 +692,7 @@ git push -u origin main
 
 ---
 
-# 十一、未來可以怎麼擴充？
+# 六、未來可以怎麼擴充？
 
 1. 使用 SSH 連接 Linux 或網路設備
 2. 使用 Serial Port／UART 讀取 Boot Log
@@ -947,4 +702,3 @@ git push -u origin main
 6. 加入多設備平行測試
 7. 輸出 HTML 測試報告
 8. 串接 Jenkins 或其他 CI/CD 平台
-
