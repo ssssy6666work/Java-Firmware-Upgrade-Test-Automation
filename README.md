@@ -1,4 +1,4 @@
-# Java Firmware Upgrade Test Automation
+# Java Firmware Upgrade Test Automation ｜ 韌體升級自動化測試
 
 這是一個使用 **Java 8、Maven、JUnit 5** 製作的「韌體升級自動化測試專案」。
 
