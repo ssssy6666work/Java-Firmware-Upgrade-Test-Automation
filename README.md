@@ -669,7 +669,80 @@ Run 'FirmwareUpgradeServiceTest'
 
 ---
 
-# 五、目前專案的限制
+## 六、成功與失敗輸出範例
+
+以下使用「正常升級成功」與「重新開機失敗」作為範例。
+
+### 1. 正常升級成功
+
+執行：
+
+```cmd
+mvn "-Dtest=FirmwareUpgradeServiceTest#shouldUpgradeFirmwareSuccessfully" test
+```
+
+CMD 會顯示：
+
+```text
+TEST CASE       : Successful firmware upgrade
+EXPECTED STATUS : PASSED
+ACTUAL STATUS   : PASSED
+TEST VERDICT    : PASS
+OLD VERSION     : 1.0.0
+TARGET VERSION  : 1.1.0
+DEVICE VERSION  : 1.1.0
+ATTEMPTS        : 1
+MESSAGE         : Firmware upgrade completed successfully
+DEVICE STATE    : ONLINE
+```
+
+其中：
+
+- `ACTUAL STATUS : PASSED`：韌體升級成功。
+- `DEVICE VERSION : 1.1.0`：裝置已更新至目標版本。
+- `DEVICE STATE : ONLINE`：裝置重新啟動後正常上線。
+
+### 2. 重新開機失敗
+
+執行：
+
+```cmd
+mvn "-Dtest=FirmwareUpgradeServiceTest#shouldReportRebootFailure" test
+```
+
+CMD 會顯示：
+
+```text
+TEST CASE       : Device reboot failure after firmware upgrade
+EXPECTED STATUS : REBOOT_FAILED
+ACTUAL STATUS   : REBOOT_FAILED
+TEST VERDICT    : PASS
+OLD VERSION     : 1.0.0
+TARGET VERSION  : 1.1.0
+DEVICE VERSION  : 1.0.0
+ATTEMPTS        : 2
+MESSAGE         : Device did not return online
+DEVICE STATE    : FAILED
+```
+
+其中：
+
+- `ACTUAL STATUS : REBOOT_FAILED`：韌體升級後裝置重新開機失敗。
+- `DEVICE VERSION : 1.0.0`：裝置沒有成功更新至目標版本。
+- `MESSAGE : Device did not return online`：失敗原因為裝置沒有恢復上線。
+- `TEST VERDICT : PASS`：代表自動化測試正確偵測到預期的失敗情境。
+
+即使韌體升級失敗，Maven 最後仍可能顯示：
+
+```text
+BUILD SUCCESS
+```
+
+這代表 JUnit 測試成功驗證了預期結果，不代表韌體本身升級成功。
+
+---
+
+# 七、目前專案的限制
 
 這個專案目前是學習與作品集版本，因此：
 
@@ -692,7 +765,7 @@ Run 'FirmwareUpgradeServiceTest'
 
 ---
 
-# 六、未來可以怎麼擴充？
+# 八、未來可以怎麼擴充？
 
 1. 使用 SSH 連接 Linux 或網路設備
 2. 使用 Serial Port／UART 讀取 Boot Log
