@@ -1,0 +1,14 @@
+com\renkai\firmware\App.class
+com\renkai\firmware\firmware\ChecksumUtil.class
+com\renkai\firmware\firmware\FirmwarePackage.class
+com\renkai\firmware\report\MarkdownReportGenerator.class
+com\renkai\firmware\device\MockDeviceClient.class
+com\renkai\firmware\upgrade\FirmwareUpgradeService.class
+com\renkai\firmware\device\DeviceState.class
+com\renkai\firmware\upgrade\UpgradeResult.class
+com\renkai\firmware\device\DeviceConfiguration.class
+com\renkai\firmware\upgrade\UpgradeStatus.class
+com\renkai\firmware\validation\ValidationResult.class
+com\renkai\firmware\device\DeviceClient.class
+com\renkai\firmware\validation\LogValidator.class
+com\renkai\firmware\firmware\FirmwareValidator.class
